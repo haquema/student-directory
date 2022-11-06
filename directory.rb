@@ -1,25 +1,10 @@
-# let's put all students into an array
-students_list = [
-  {name: "Dr. Hannibal Lecter", cohort: :november},
-  {name: "Darth Vader", cohort: :november},
-  {name: "Nurse Ratched", cohort: :november},
-  {name: "Michael Corleone", cohort: :november},
-  {name: "Alex DeLarge", cohort: :november},
-  {name: "The Wicked Witch of the West", cohort: :november},
-  {name: "Terminator", cohort: :november},
-  {name: "Freddy Krueger", cohort: :november},
-  {name: "The Joker", cohort: :november},
-  {name: "Joffrey Baratheon", cohort: :november},
-  {name: "Norman Bates", cohort: :november}
-]
-
 def print_header
   puts "The students of Villains Academy"
   puts "-------------"
 end
 
-def print(students)
-  students.each do |student|
+def print
+  @students.each do |student|
     puts "#{student[:name]} (#{student[:cohort]} cohort)"
   end
 end
@@ -38,7 +23,7 @@ def input_students
   while !name.empty? do
     # add the student hash to the array
     @students << {name: name, cohort: :november}
-    puts "Now we have #{students.count} students"
+    puts "Now we have #{@students.count} students"
     # get another name from the user
     name = gets.chomp
   end
@@ -47,9 +32,20 @@ end
 
 @students = []
 
+def save_students
+  file = File.open("students.csv", "w")
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
+end
+
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
+  puts "3. Save the list to students.csv"
   puts "9. Exit"
 end
 
@@ -65,6 +61,8 @@ def process(selection)
     input_students
     when "2"
       show_students
+    when "3"
+      save_students
     when "9"
       exit
     else
